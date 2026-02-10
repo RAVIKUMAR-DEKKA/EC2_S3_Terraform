@@ -1,8 +1,3 @@
-# Existing S3 bucket
-data "aws_s3_bucket" "existing" {
-  bucket = var.bucket_name
-}
-
 # Default VPC and subnet
 data "aws_vpc" "default" {
   default = true
@@ -51,10 +46,11 @@ resource "aws_iam_role" "ec2_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
+# Using direct bucket name for IAM policy resources
 data "aws_iam_policy_document" "s3_read" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${data.aws_s3_bucket.existing.arn}/*"]
+    resources = ["arn:aws:s3:::pavan-2026-s3-demo/*"]
   }
 }
 
@@ -82,11 +78,12 @@ resource "aws_instance" "this" {
   associate_public_ip_address = true
   key_name                    = var.key_name
 
+  # User data updated with direct bucket name string
   user_data = <<-EOF
     #!/bin/bash
     yum install -y awscli
     mkdir -p /home/ec2-user/s3-downloads
-    aws s3 cp s3://${data.aws_s3_bucket.existing.bucket}/${var.object_key_to_download} \
+    aws s3 cp s3://pavan-2026-s3-demo/${var.object_key_to_download} \
       /home/ec2-user/s3-downloads/${var.object_key_to_download}
     chown -R ec2-user:ec2-user /home/ec2-user/s3-downloads
   EOF

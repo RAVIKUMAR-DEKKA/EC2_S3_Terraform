@@ -5,7 +5,7 @@ provider "aws" {
 module "ec2_s3_instance" {
   source = "./modules/ec2_s3_instance"
 
-  #bucket_name            = var.bucket_name
+  bucket_name            = var.bucket_name
   object_key_to_download = var.object_key_to_download
   ami_id                 = var.ami_id
   instance_type          = var.instance_type
