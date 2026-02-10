@@ -34,9 +34,9 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false
 
-      - name: Destroy with variables
-        run: terraform destroy -auto-approve
+      # - name: Destroy with variables
+        # run: terraform destroy -auto-approve
 
-      #- name: Terraform Apply (auto-approve for demo)
-       # if: github.ref == 'refs/heads/main'
-        #run: terraform apply -auto-approve -input=false
+      - name: Terraform Apply (auto-approve for demo)
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -input=false
